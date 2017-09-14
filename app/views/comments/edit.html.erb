@@ -1,0 +1,18 @@
+<% content_for :meta_title, t('.title') %>
+<% content_for :breadcrumbs do %>
+    <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
+    <%= admin_comment_link(@entity) %>
+    <span><%= t(:edit) %></span>
+<% end %>
+
+<article class="edit-comment">
+  <h1><%= t('.title') %></h1>
+
+  <ul class="actions">
+    <li><%= return_icon(admin_comment_path(@entity.id)) %></li>
+    <li><%= world_icon(@entity.commentable) %></li>
+    <li class="danger"><%= destroy_icon(@entity) %></li>
+  </ul>
+
+  <%= render partial: 'form', locals: { entity: @entity } %>
+</article>

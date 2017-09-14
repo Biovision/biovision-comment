@@ -1,0 +1,27 @@
+<% content_for :meta_title, t('.title', id: @entity.id) %>
+<% content_for :options do %>
+      <ul>
+        <li><%= link_to t(:list), admin_comments_path %></li>
+        <li><%= link_to t(:edit), edit_comment_path(@entity) %></li>
+      </ul>
+<% end %>
+
+<article class="comment">
+  <h1><%= t('.title', id: @entity.id) %></h1>
+
+  <div class="comment">
+    <div class="title">
+      <%= @entity.commentable.model_name.human %>
+      <cite><%= link_to @entity.commentable.title, @entity.commentable %></cite>
+    </div>
+
+    <div class="author">
+      <%= user_link @entity.user %>
+      <%= time_tag @entity.created_at %>
+    </div>
+
+    <div class="body">
+      <%= prepare_comment_text(@entity) %>
+    </div>
+  </div>
+</article>

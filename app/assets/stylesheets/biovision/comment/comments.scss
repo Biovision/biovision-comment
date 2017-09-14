@@ -1,0 +1,104 @@
+$border-primary: .1rem solid rgb(127, 127, 127) !default;
+$font-size-decreased: 1.2rem !default;
+$font-size-small: 1rem !default;
+$row-background-even: #f0f0f0 !default;
+$row-background-odd: #fafafa !default;
+
+section.comments {
+  margin: 1.6rem 0;
+  padding: 0 0.8rem;
+  border-top: $border-primary;
+
+  > h2 {
+    margin: 0.8rem 0;
+  }
+
+  > div {
+    background-color: $row-background-odd;
+    padding: 0.4rem;
+
+    &:nth-of-type(even) {
+      background-color: $row-background-even;
+    }
+  }
+}
+
+div.comment {
+  position: relative;
+
+  .deleted {
+    font-size: $font-size-decreased;
+    font-style: italic;
+    padding: 0 .8rem;
+
+    &::before {
+      content: '[';
+    }
+
+    &::after {
+      content: ']';
+    }
+  }
+
+  .title {
+    padding: 0 0 0.4rem 0;
+    border-bottom: dotted 0.1rem;
+    margin: 0.8rem 0;
+
+    cite {
+      &:before {
+        content: open-quote;
+      }
+
+      &:after {
+        content: close-quote;
+      }
+    }
+  }
+
+  .body {
+    background: #ffffff;
+    margin: 0.8rem;
+    padding: 0.8rem;
+    position: relative;
+  }
+
+  .author {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.8rem;
+
+    time {
+      font-size: $font-size-decreased;
+      font-style: italic;
+    }
+  }
+
+  .footer {
+    padding: 0.8rem 1.6rem;
+
+    > ul {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      justify-content: flex-end;
+
+      > li {
+        list-style: none;
+        margin: 0 0.4rem;
+        padding: 0;
+        font-size: $font-size-small;
+        text-align: right;
+
+        &:before {
+          content: '[';
+        }
+
+        &:after {
+          content: ']';
+        }
+      }
+    }
+  }
+}

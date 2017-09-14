@@ -1,0 +1,40 @@
+<% content_for :meta_title, t('.title', id: @entity.id) %>
+<% content_for :breadcrumbs do %>
+    <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
+    <span>
+      <%= @entity.id %> (<%= @entity.commentable.model_name.human %>
+      <cite><%= @entity.commentable.title %></cite>)
+    </span>
+<% end %>
+
+<article>
+  <h1><%= @entity.commentable.title %></h1>
+
+  <ul class="actions">
+    <li><%= back_icon(admin_comments_path) %></li>
+    <% unless @entity.locked? %>
+        <li><%= edit_icon edit_comment_path(@entity.id) %></li>
+    <% end %>
+  </ul>
+
+  <% if @entity.deleted? %>
+      <div class="message-box-alert"><%= t(:deleted_entity) %></div>
+  <% end %>
+
+  <dl>
+    <dt><%= t('activerecord.attributes.comment.user_id') %></dt>
+    <dd><%= admin_user_link(@entity.user) %></dd>
+
+    <dt><%= t('activerecord.attributes.comment.commentable') %></dt>
+    <dd><%= comment_link(@entity) %></dd>
+
+    <dt><%= t(:created_at) %></dt>
+    <dd><%= time_tag(@entity.created_at) %></dd>
+
+    <dt><%= t('activerecord.attributes.comment.body') %></dt>
+    <dd>
+      <%= prepare_comment_text(@entity) %>
+    </dd>
+  </dl>
+
+</article>

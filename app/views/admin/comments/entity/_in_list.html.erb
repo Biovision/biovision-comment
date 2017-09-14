@@ -1,0 +1,28 @@
+<div class="image">
+  <%= profile_avatar(entity.user) %>
+</div>
+<div class="data">
+  <div>
+    <%= admin_comment_link(entity) %>
+
+    <% if entity.deleted? %>
+        (<%= t('activerecord.attributes.comment.deleted') %>)
+    <% end %>
+  </div>
+
+  <div class="info">
+    <%= admin_user_link(entity.user) %>,
+    <%= time_tag entity.created_at %>
+  </div>
+
+  <div class="info">
+    <%= prepare_comment_text(entity) %>
+  </div>
+
+  <ul class="actions">
+    <li><%= edit_icon(edit_comment_path(entity.id)) %></li>
+    <% unless entity.deleted? %>
+        <li class="danger"><%= destroy_icon(entity) %></li>
+    <% end %>
+  </ul>
+</div>

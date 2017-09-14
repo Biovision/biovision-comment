@@ -1,0 +1,65 @@
+ru:
+  comment_count:
+    zero: "комментариев нет"
+    one: "%{count} комментарий"
+    few: "%{count} комментария"
+    many: "%{count} комментариев"
+    other: "%{count} комментариев"
+  comment:
+    zero: "комментариев нет"
+    one: "%{count} комментарий"
+    few: "%{count} комментария"
+    many: "%{count} комментариев"
+    other: "%{count} комментариев"
+  add_comment: "Добавить комментарий"
+  comments_list: "Комментарии"
+  activerecord:
+    models:
+      comment: "Комментарий"
+    errors:
+      models:
+        comment:
+          attributes:
+            commentable:
+              not_commentable: "недоступен вам для комментирования"
+    attributes:
+      comment:
+        commentable: "Комментируемый объект" # Comment validates_presence_of :commentable
+        commentable_id: "Комментируемый объект"
+        commentable_type: "Тип комментируемого объекта"
+        user_id: "Автор"
+        deleted: "Комментарий удалён"
+        body: "Текст"
+  admin:
+    comments:
+      nav_item:
+        text: "Комментарии"
+        description: "Модерация комментариев"
+      index:
+        title: "Комментарии, страница %{page}"
+        heading: "Комментарии"
+      show:
+        title: "Комментарий №%{id}"
+  my:
+    comments:
+      index:
+        title: "Мои комментарии, страница %{page}"
+        heading: "Мои комментарии"
+        description: "Оставленные вами комментарии"
+  comments:
+    create:
+      success: "Комментарий добавлен"
+    update:
+      success: "Комментарий изменён"
+    destroy:
+      success: "Комментарий удалён"
+    new:
+      title: "Добавление комментария"
+    edit:
+      title: "Редактирование комментария"
+    show:
+      title: "Комментарий №%{id}"
+    entry_reply:
+      subject: "Новый комментарий к вашей записи"
+    comment:
+      deleted: "Комментарий удалён"

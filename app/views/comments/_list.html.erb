@@ -1,0 +1,19 @@
+<section class="comments">
+  <% if comments.any? %>
+      <h2><%= t(:comments_list) %></h2>
+
+      <% comments.recent.each do |comment| %>
+          <%= render comment %>
+      <% end %>
+  <% end %>
+
+  <% if commentable.respond_to?(:commentable_by?) && commentable.commentable_by?(current_user) %>
+      <section class="reply-container">
+        <h2><%= t(:add_comment) %></h2>
+
+        <div class="container">
+          <%= render partial: 'comments/form', locals: { entity: Comment.new(commentable: commentable) } %>
+        </div>
+      </section>
+  <% end %>
+</section>

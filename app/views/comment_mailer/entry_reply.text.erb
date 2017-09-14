@@ -1,0 +1,11 @@
+Здравствуйте, <%= @comment.commentable.user.name_for_letter %>.
+
+На вашу запись «<%= @comment.commentable.title %>» на сайте party-npk.ru
+<%= url_for @comment.commentable %>
+
+Сам комментарий (<%= @comment.user.nil? ? 'анонимный' : @comment.user.profile_name %>):
+<%= simple_format @comment.body %>
+
+--
+  С уважением.
+  автоматический уведомитель
