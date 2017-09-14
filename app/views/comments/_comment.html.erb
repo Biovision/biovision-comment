@@ -20,6 +20,6 @@
         <% end %>
       </div>
 
-      <%= render partial: 'votes/vote_block', locals: { votable: comment } %>
+      <%= render(partial: 'votes/vote_block', locals: { votable: comment }) if defined?(Biovision::Vote) %>
   <% end %>
 </div>
