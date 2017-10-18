@@ -1,9 +1,10 @@
 class Comment < ApplicationRecord
   include HasOwner
   include Toggleable
-  include VotableItem
+  include VotableItem if 'Vote'.safe_constantize
 
-  PER_PAGE = 20
+  PER_PAGE   = 20
+  BODY_LIMIT = 5000
 
   toggleable :visible
 
@@ -12,6 +13,7 @@ class Comment < ApplicationRecord
   belongs_to :commentable, polymorphic: true, counter_cache: true, touch: false
 
   validates_presence_of :body
+  validates_length_of :body, maximum: BODY_LIMIT
   validate :commentable_is_commentable
 
   scope :recent, -> { order 'id desc' }
