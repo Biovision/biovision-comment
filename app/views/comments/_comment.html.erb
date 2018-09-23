@@ -1,5 +1,5 @@
 <div id="comment-<%= comment.id %>" itemscope itemtype="http://schema.org/Comment" class="comment">
-  <% if comment.deleted? %>
+  <% if comment.deleted? || comment.user&.deleted? %>
       <div class="deleted"><%= t('.deleted') %></div>
   <% else %>
       <meta itemprop="url" content="<%= comment_url comment %>"/>

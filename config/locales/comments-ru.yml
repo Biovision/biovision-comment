@@ -40,6 +40,8 @@ ru:
         heading: "Комментарии"
       show:
         title: "Комментарий №%{id}"
+      comment:
+        deleted: "Комментарий удалён"
   my:
     comments:
       index:
