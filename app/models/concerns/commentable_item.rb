@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Adds "commentable" behavior to entity
 module CommentableItem
   extend ActiveSupport::Concern
 

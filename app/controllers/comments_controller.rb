@@ -1,18 +1,21 @@
-class CommentsController < ApplicationController
-  before_action :restrict_anonymous_access
-  before_action :restrict_access, except: [:create]
-  before_action :set_entity, only: [:show, :edit, :update, :destroy]
+# frozen_string_literal: true
 
-  layout 'admin'
+# Comments
+class CommentsController < ApplicationController
+  before_action :restrict_access, except: :create
+  before_action :set_entity, only: %i[show edit update destroy]
+
+  layout 'admin', except: :create
 
   # post /comments
   def create
     @entity = Comment.new creation_parameters
     if @entity.save
       notify_participants
-      redirect_to(@entity.commentable || admin_comment_path(@entity.id), notice: t('comments.create.success'))
+      next_page = @entity.commentable || admin_comment_path(id: @entity.id)
+      form_processed_ok(next_page)
     else
-      render :new, layout: 'application', status: :bad_request
+      form_processed_with_error(:new)
     end
   end
 
@@ -27,9 +30,9 @@ class CommentsController < ApplicationController
   # patch /comments/:id
   def update
     if @entity.update entity_parameters
-      redirect_to admin_comment_path(@entity.id), notice: t('comments.update.success')
+      form_processed_ok(admin_comment_path(id: @entity.id))
     else
-      render :edit, status: :bad_request
+      form_processed_with_error(:edit)
     end
   end
 
@@ -49,18 +52,21 @@ class CommentsController < ApplicationController
 
   def set_entity
     @entity = Comment.find_by(id: params[:id])
-    if @entity.nil?
-      handle_http_404('Cannot find comment')
-    end
+    handle_http_404('Cannot find comment') if @entity.nil?
   end
 
   def entity_parameters
-    permitted = current_user_has_privilege?(:moderator, nil) ? Comment.administrative_parameters : Comment.entity_parameters
+    permitted = if current_user_has_privilege?(:moderator, nil)
+                  Comment.administrative_parameters
+                else
+                  Comment.entity_parameters
+                end
     params.require(:comment).permit(permitted)
   end
 
   def creation_parameters
-    params.require(:comment).permit(Comment.creation_parameters).merge(owner_for_entity(true))
+    permitted = Comment.creation_parameters
+    params.require(:comment).permit(permitted).merge(owner_for_entity(true))
   end
 
   def notify_participants

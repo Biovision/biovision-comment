@@ -24,12 +24,16 @@ ru:
               not_commentable: "недоступен вам для комментирования"
     attributes:
       comment:
+        author_email: "Email"
+        author_name: "Имя"
+        body: "Текст"
         commentable: "Комментируемый объект" # Comment validates_presence_of :commentable
         commentable_id: "Комментируемый объект"
         commentable_type: "Тип комментируемого объекта"
-        user_id: "Автор"
         deleted: "Комментарий удалён"
-        body: "Текст"
+        spam: "Спам"
+        user_id: "Автор"
+        visible: "Показывать"
   admin:
     comments:
       nav_item:
@@ -65,3 +69,8 @@ ru:
       subject: "Новый комментарий к вашей записи"
     comment:
       deleted: "Комментарий удалён"
+    form:
+      guidelines:
+        author_name: "Максимум 100 символов, обязательное поле."
+        author_email: "Не показывается публично. Максимум 100 символов, обязательное поле."
+        body: "Максимум 5000 символов."

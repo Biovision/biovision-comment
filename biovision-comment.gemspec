@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kaminari'
 
   s.add_development_dependency 'database_cleaner'
-  s.add_development_dependency 'factory_girl_rails'
+  s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'pg'
   s.add_development_dependency 'rspec-rails'
 end

@@ -1,10 +1,10 @@
 <% content_for :meta_title, t('.title', id: @entity.id) %>
 <% content_for :breadcrumbs do %>
-    <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
-    <span>
-      <%= @entity.id %> (<%= @entity.commentable.model_name.human %>
-      <cite><%= @entity.commentable.title %></cite>)
-    </span>
+  <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
+  <span>
+    <%= @entity.id %> (<%= @entity.commentable.model_name.human %>
+    <cite><%= @entity.commentable.title %></cite>)
+  </span>
 <% end %>
 
 <article>
@@ -13,17 +13,27 @@
   <ul class="actions">
     <li><%= back_icon(admin_comments_path) %></li>
     <% unless @entity.locked? %>
-        <li><%= edit_icon edit_comment_path(@entity.id) %></li>
+      <li><%= edit_icon edit_comment_path(@entity.id) %></li>
     <% end %>
   </ul>
 
   <% if @entity.deleted? %>
-      <div class="message-box-alert"><%= t(:deleted_entity) %></div>
+    <div class="message-box-alert"><%= t(:deleted_entity) %></div>
   <% end %>
 
   <dl>
     <dt><%= t('activerecord.attributes.comment.user_id') %></dt>
     <dd><%= admin_user_link(@entity.user) %></dd>
+
+    <% unless @entity.author_name.blank? %>
+      <dt><%= t('activerecord.attributes.comment.author_name') %></dt>
+      <dd><%= @entity.author_name %></dd>
+    <% end %>
+
+    <% unless @entity.author_email.blank? %>
+      <dt><%= t('activerecord.attributes.comment.author_email') %></dt>
+      <dd><%= @entity.author_email %></dd>
+    <% end %>
 
     <dt><%= t('activerecord.attributes.comment.commentable') %></dt>
     <dd><%= comment_link(@entity) %></dd>
@@ -33,8 +43,9 @@
 
     <dt><%= t('activerecord.attributes.comment.body') %></dt>
     <dd>
-      <%= prepare_comment_text(@entity) %>
+      <div class="text">
+        <%= prepare_comment_text(@entity) %>
+      </div>
     </dd>
   </dl>
-
 </article>
