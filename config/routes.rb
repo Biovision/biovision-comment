@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :comments, only: %i[update destroy]
 
   scope '/(:locale)', constraints: { locale: /ru|en|sv/ } do
-    resources :comments, only: %i[edit show] do
+    resources :comments, only: %i[create edit show] do
       post 'check', on: :collection
     end
 
