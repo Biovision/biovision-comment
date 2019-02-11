@@ -20,7 +20,10 @@ class CommentsController < ApplicationController
     if @entity.save
       notify_participants
       next_page = @entity.commentable || admin_comment_path(id: @entity.id)
-      form_processed_ok(next_page)
+      respond_to do |format|
+        format.js { render(js: "document.location.reload(true)") }
+        format.html { redirect_to(next_page) }
+      end
     else
       form_processed_with_error(:new)
     end
