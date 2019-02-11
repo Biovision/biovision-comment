@@ -7,6 +7,13 @@ class CommentsController < ApplicationController
 
   layout 'admin', except: :create
 
+  # post /comments/check
+  def check
+    @entity = Comment.instance_for_check(params[:entity_id], entity_parameters)
+
+    render 'shared/forms/check'
+  end
+
   # post /comments
   def create
     @entity = Comment.new creation_parameters
