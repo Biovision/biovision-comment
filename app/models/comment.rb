@@ -31,7 +31,7 @@ class Comment < ApplicationRecord
 
   toggleable :visible
 
-  belongs_to :user, optional: true, counter_cache: true, touch: false
+  belongs_to :user, optional: true
   belongs_to :agent, optional: true
   belongs_to :commentable, polymorphic: true, counter_cache: true, touch: false
 

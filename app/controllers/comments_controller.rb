@@ -16,7 +16,7 @@ class CommentsController < ApplicationController
 
   # post /comments
   def create
-    @entity = Comment.new creation_parameters
+    @entity = Comment.new(creation_parameters)
     if @entity.save
       notify_participants
       next_page = @entity.commentable || admin_comment_path(id: @entity.id)
@@ -66,7 +66,7 @@ class CommentsController < ApplicationController
   end
 
   def entity_parameters
-    permitted = if current_user_has_privilege?(:moderator, nil)
+    permitted = if current_user_has_privilege?(:moderator)
                   Comment.administrative_parameters
                 else
                   Comment.entity_parameters
