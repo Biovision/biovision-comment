@@ -11,10 +11,10 @@
       </div>
 
       <div class="body" itemprop="about">
-        <%= prepare_comment_text(comment) %>
-        <% if UserPrivilege.user_has_privilege?(current_user, :moderator) %>
+        <%= simple_format(comment.body) %>
+        <% if current_user_has_privilege?(:moderator) %>
             <ul class="actions">
-              <li><%= edit_icon(edit_comment_path(comment.id)) %></li>
+              <li><%= edit_icon(edit_comment_path(id: comment.id)) %></li>
               <li class="danger"><%= destroy_icon(comment) %></li>
             </ul>
         <% end %>
