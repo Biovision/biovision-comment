@@ -2,25 +2,47 @@
 <%=
   form_with(
       model: entity,
-      html:  {
-          id:   "#{model_name}-form",
+      html: {
+          id: "#{model_name}-form",
+          class: 'comment-form',
           data: { check_url: check_comments_path }
       }
   ) do |f|
 %>
   <%= render partial: 'shared/list_of_errors', locals: { entity: entity } %>
-  <dl>
-    <% if current_user.nil? %>
-      <dt><%= f.label :author_name %></dt>
-      <dd>
+  <div class="fields">
+    <div class="required">
+      <%= f.label :body %>
+      <%=
+        f.text_area(
+            :body,
+            id: "#{model_name}_body",
+            required: true,
+            cols: 60,
+            rows: 5,
+            maxlength: Comment::BODY_LIMIT,
+            class: 'auto-expand',
+            data: {
+                min_rows: 5,
+                max_rows: 30,
+                check: :body
+            }
+        )
+      %>
+      <div class="check-result-error hidden" data-field="body"></div>
+      <div class="guideline"><%= t('.guidelines.body') %></div>
+    </div>
+    <% if current_user.nil? || entity.user.nil? %>
+      <div class="required">
+        <%= f.label :author_name %>
         <%=
           f.text_field(
               :author_name,
-              id:        "#{model_name}_author_name",
-              required:  true,
-              size:      nil,
+              id: "#{model_name}_author_name",
+              required: true,
+              size: nil,
               maxlength: Comment::AUTHOR_LIMIT,
-              data:      {
+              data: {
                   check: :author_name
               }
           )
@@ -29,18 +51,18 @@
         <div class="guideline">
           <%= t('.guidelines.author_name') %>
         </div>
-      </dd>
+      </div>
 
-      <dt><%= f.label :author_email %></dt>
-      <dd>
+      <div class="required">
+        <%= f.label :author_email %>
         <%=
           f.email_field(
               :author_email,
-              id:        "#{model_name}_author_email",
-              required:  true,
-              size:      nil,
+              id: "#{model_name}_author_email",
+              required: true,
+              size: nil,
               maxlength: Comment::AUTHOR_LIMIT,
-              data:      {
+              data: {
                   check: :author_email
               }
           )
@@ -49,47 +71,24 @@
         <div class="guideline">
           <%= t('.guidelines.author_email') %>
         </div>
-      </dd>
+      </div>
+
+      <div class="disclaimer">
+        <%= check_box_tag :agree, '1', false, class: 'hidden', tabindex: '-1' %>
+        <%= t('.disclaimer') %>
+      </div>
     <% end %>
-    <dt><%= f.label :body %></dt>
-    <dd>
-      <%=
-        f.text_area(
-            :body,
-            id:        "#{model_name}_body",
-            required:  true,
-            cols:      60,
-            rows:      5,
-            maxlength: Comment::BODY_LIMIT,
-            class:     'auto-expand',
-            data:      {
-                min_rows: 5,
-                max_rows: 30,
-                check:    :body
-            }
-        )
-      %>
-      <div class="check-result-error hidden" data-field="body"></div>
-      <div class="guideline"><%= t('.guidelines.body') %></div>
-    </dd>
-  </dl>
-  <% if current_user_has_privilege?(:administrator) && !entity.id.nil? %>
-    <ul class="flags">
-      <li>
-        <%= f.check_box :deleted %>
-        <%= f.label :deleted %>
-      </li>
-    </ul>
-  <% end %>
+  </div>
 
   <%= render 'shared/forms/state_container' %>
 
   <div class="buttons">
+    <%= hidden_field_tag :return_url, url_for %>
     <%= hidden_field_tag :entity_id, entity.id %>
     <% if entity.id.nil? %>
       <%= f.hidden_field :commentable_id %>
       <%= f.hidden_field :commentable_type %>
     <% end %>
-    <%= f.button t(:submit), type: 'submit' %>
+    <%= f.button t(:submit), type: 'submit', class: 'button-primary' %>
   </div>
 <% end %>

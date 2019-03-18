@@ -1,0 +1,8 @@
+<% if current_user_has_privilege?(:moderator) %>
+  <nav>
+    <h3><%= t('.heading') %></h3>
+    <ul>
+      <li><%= render 'admin/comments/nav_item' %></li>
+    </ul>
+  </nav>
+<% end %>

@@ -1,25 +1,36 @@
-<div id="comment-<%= comment.id %>" itemscope itemtype="http://schema.org/Comment" class="comment">
+<% element_id = "comment-#{comment.id}" %>
+<div id="<%= element_id %>" itemscope itemtype="http://schema.org/Comment" class="comment-item">
   <% if comment.deleted? || comment.user&.deleted? %>
-      <div class="deleted"><%= t('.deleted') %></div>
+    <div class="deleted"><%= t('.deleted') %></div>
   <% else %>
-      <meta itemprop="url" content="<%= comment_url comment %>"/>
-      <div class="author">
-        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <span itemprop="name"><%= user_link comment.user %></span>
-        </span>
+    <meta itemprop="url" content="<%= url_for(anchor: element_id) %>"/>
+    <% if current_user_has_privilege?(:moderator) %>
+      <ul class="actions">
+        <li><%= edit_icon(edit_comment_path(id: comment.id)) %></li>
+        <li class="danger"><%= destroy_icon(comment) %></li>
+      </ul>
+    <% end %>
+
+    <div class="meta">
+      <div class="avatar">
+        <%= user_image_preview(comment.user) %>
+      </div>
+      <div class="info">
+        <div itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <%= comment.user.nil? ? comment.author_name : user_link(comment.user) %>
+          </span>
+        </div>
         <%= time_tag comment.created_at %>
       </div>
+    </div>
 
-      <div class="body" itemprop="about">
-        <%= simple_format(comment.body) %>
-        <% if current_user_has_privilege?(:moderator) %>
-            <ul class="actions">
-              <li><%= edit_icon(edit_comment_path(id: comment.id)) %></li>
-              <li class="danger"><%= destroy_icon(comment) %></li>
-            </ul>
-        <% end %>
-      </div>
+    <div class="body" itemprop="about">
+      <%= simple_format(comment.body) %>
+    </div>
 
-      <%= render(partial: 'votes/vote_block', locals: { votable: comment }) if defined?(Biovision::Vote) %>
+    <% if Gem.loaded_specs.key?('biovision-vote') %>
+      <%= render(partial: 'votes/vote_block', locals: { votable: comment }) %>
+    <% end %>
   <% end %>
 </div>

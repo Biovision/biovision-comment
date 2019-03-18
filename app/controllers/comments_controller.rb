@@ -2,8 +2,8 @@
 
 # Comments
 class CommentsController < ApplicationController
-  before_action :restrict_access, except: :create
-  before_action :set_entity, only: %i[show edit update destroy]
+  before_action :restrict_access, except: %i[check create]
+  before_action :set_entity, only: %i[edit update destroy]
 
   layout 'admin', except: :create
 
@@ -16,21 +16,11 @@ class CommentsController < ApplicationController
 
   # post /comments
   def create
-    @entity = Comment.new(creation_parameters)
-    if @entity.save
-      notify_participants
-      next_page = @entity.commentable || admin_comment_path(id: @entity.id)
-      respond_to do |format|
-        format.js { render(js: "document.location.reload(true)") }
-        format.html { redirect_to(next_page) }
-      end
+    if params.key?(:agree)
+      emulate_creation
     else
-      form_processed_with_error(:new)
+      create_comment
     end
-  end
-
-  # get /comments/:id
-  def show
   end
 
   # get /comments/:id/edit
@@ -60,18 +50,28 @@ class CommentsController < ApplicationController
     require_privilege :moderator
   end
 
+  def emulate_creation
+    form_processed_ok(root_path)
+  end
+
+  def create_comment
+    @entity = Comment.new(creation_parameters)
+    if @entity.save
+      notify_participants
+      next_page = param_from_request(:return_url)
+      form_processed_ok(next_page.match?(%r{\A/[^/]}) ? next_page : root_path)
+    else
+      form_processed_with_error(:new)
+    end
+  end
+
   def set_entity
     @entity = Comment.find_by(id: params[:id])
     handle_http_404('Cannot find comment') if @entity.nil?
   end
 
   def entity_parameters
-    permitted = if current_user_has_privilege?(:moderator)
-                  Comment.administrative_parameters
-                else
-                  Comment.entity_parameters
-                end
-    params.require(:comment).permit(permitted)
+    params.require(:comment).permit(Comment.entity_parameters)
   end
 
   def creation_parameters
@@ -80,15 +80,6 @@ class CommentsController < ApplicationController
   end
 
   def notify_participants
-    commentable = @entity.commentable
-    unless commentable.owned_by?(current_user)
-      category = Notification.category_from_object(commentable)
-      Notification.notify(commentable.user, category, commentable.id)
-      # begin
-      #   Comments.entry_reply(@entity).deliver_now if @entity.notify_entry_owner?
-      # rescue Net::SMTPAuthenticationError => error
-      #   logger.warn error.message
-      # end
-    end
+    # to be implemented...
   end
 end

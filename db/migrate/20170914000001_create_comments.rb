@@ -5,7 +5,7 @@ class CreateComments < ActiveRecord::Migration[5.0]
   def up
     return if Comment.table_exists?
 
-    create_table :comments do |t|
+    create_table :comments, comment: 'Comment for commentable item' do |t|
       t.timestamps
       t.integer :parent_id
       t.references :user, foreign_key: { on_update: :cascade, on_delete: :cascade }
@@ -25,7 +25,7 @@ class CreateComments < ActiveRecord::Migration[5.0]
       t.text :body, null: false
     end
 
-    add_index :comments, [:commentable_id, :commentable_type]
+    add_index :comments, %i[commentable_id commentable_type]
     add_foreign_key :comments, :comments, column: :parent_id, on_update: :cascade, on_delete: :cascade
   end
 
