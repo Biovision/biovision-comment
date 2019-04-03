@@ -27,7 +27,7 @@ class Comment < ApplicationRecord
   include VotableItem if Gem.loaded_specs.key?('biovision-vote')
 
   AUTHOR_LIMIT = 100
-  BODY_LIMIT   = 5000
+  BODY_LIMIT   = 65_535
 
   toggleable :visible
 
