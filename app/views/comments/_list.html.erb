@@ -16,7 +16,7 @@
           render(
               partial: 'comments/form',
               locals: {
-                  entity: Comment.new(commentable: commentable)
+                  entity: Comment.new(commentable: commentable, user: current_user)
               }
           )
         %>
