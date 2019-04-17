@@ -3,17 +3,20 @@
   <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
   <span>
     <%= @entity.id %> (<%= @entity.commentable.model_name.human %>
-    <cite><%= @entity.commentable.title %></cite>)
+    <cite><%= @entity.commentable_title %></cite>)
   </span>
 <% end %>
 
 <article>
-  <h1><%= @entity.commentable.title %></h1>
+  <h1><%= @entity.commentable_title %></h1>
 
   <ul class="actions">
     <li><%= back_icon(admin_comments_path) %></li>
+    <% unless @entity.deleted? %>
+      <li><%= world_icon(CommentsManager.commentable_path(@entity, true)) %></li>
+    <% end %>
     <% unless @entity.locked? %>
-      <li><%= edit_icon edit_comment_path(@entity.id) %></li>
+      <li><%= edit_icon edit_comment_path(id: @entity.id) %></li>
     <% end %>
   </ul>
 
@@ -44,7 +47,7 @@
     <dt><%= t('activerecord.attributes.comment.body') %></dt>
     <dd>
       <div class="text">
-        <%= prepare_comment_text(@entity) %>
+        <%= simple_format(@entity.body) %>
       </div>
     </dd>
   </dl>

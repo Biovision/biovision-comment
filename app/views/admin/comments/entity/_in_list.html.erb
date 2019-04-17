@@ -6,23 +6,26 @@
     <%= admin_comment_link(entity) %>
 
     <% if entity.deleted? %>
-        (<%= t('activerecord.attributes.comment.deleted') %>)
+      (<%= t('activerecord.attributes.comment.deleted') %>)
     <% end %>
   </div>
 
   <div class="info">
+    <%= entity.commentable_name %>
+    (<%= entity.commentable_title %>)<br/>
     <%= admin_user_link(entity.user) %>,
     <%= time_tag entity.created_at %>
   </div>
 
-  <div class="info">
-    <%= prepare_comment_text(entity) %>
+  <div class="secondary info">
+    <%= simple_format(entity.body) %>
   </div>
 
   <ul class="actions">
-    <li><%= edit_icon(edit_comment_path(entity.id)) %></li>
+    <li><%= edit_icon(edit_comment_path(id: entity.id)) %></li>
     <% unless entity.deleted? %>
-        <li class="danger"><%= destroy_icon(entity) %></li>
+      <li><%= world_icon(CommentsManager.commentable_path(entity, true)) %></li>
+      <li class="danger"><%= destroy_icon(entity) %></li>
     <% end %>
   </ul>
 </div>

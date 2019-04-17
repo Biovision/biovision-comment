@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   resources :comments, only: %i[update destroy]
 
-  scope '/(:locale)', constraints: { locale: /ru|en|sv/ } do
+  scope '/(:locale)', constraints: { locale: /ru|en|sv|cn/ } do
     resources :comments, only: %i[create edit show] do
       post 'check', on: :collection
     end

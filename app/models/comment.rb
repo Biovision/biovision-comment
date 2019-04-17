@@ -99,6 +99,22 @@ class Comment < ApplicationRecord
     end
   end
 
+  def text_for_link
+    "#{self.class.model_name.human} #{id}"
+  end
+
+  def commentable_name
+    "#{commentable.class.model_name.human} #{commentable_id}"
+  end
+
+  def commentable_title
+    if commentable.respond_to?(:title)
+      commentable.title
+    else
+      commentable_name
+    end
+  end
+
   private
 
   def commentable_is_commentable
