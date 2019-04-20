@@ -5,13 +5,15 @@
   <% if comments.any? %>
     <h3><%= t(:comments_list) %></h3>
 
-    <% comments.recent.each do |comment| %>
+    <% comment_tree = Comment.tree(comments.recent) %>
+    <% comment_tree.select {|_, item| item[:parent_id].nil? }.each do |_, item| %>
       <%=
         render(
             partial: 'comments/comment',
             locals: {
-                comment: comment,
-                show_container: show_container
+                comment: item[:comment],
+                show_container: show_container,
+                comment_tree: comment_tree
             }
         )
       %>

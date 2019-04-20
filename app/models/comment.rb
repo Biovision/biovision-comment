@@ -27,7 +27,7 @@ class Comment < ApplicationRecord
   include VotableItem if Gem.loaded_specs.key?('biovision-vote')
 
   AUTHOR_LIMIT = 100
-  BODY_LIMIT   = 65_535
+  BODY_LIMIT = 65_535
 
   toggleable :visible
 
@@ -77,6 +77,19 @@ class Comment < ApplicationRecord
 
   def self.administrative_parameters
     entity_parameters + %i[deleted visible spam]
+  end
+
+  def self.tree(collection)
+    result = {}
+
+    collection.each do |entity|
+      result[entity.id] = {
+        parent_id: entity.parent_id,
+        comment: entity,
+      }
+    end
+
+    result
   end
 
   # @param [User] user

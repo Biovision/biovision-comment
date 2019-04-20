@@ -37,7 +37,9 @@
 
     <% if show_container %>
       <div class="comment-reply-block">
-        <div class="comment-reply-button"><button></button></div>
+        <div class="comment-reply-button">
+          <button></button>
+        </div>
         <div class="container hidden">
           <button class="cancel" type="button"><%= t('.cancel_reply') %></button>
         </div>
@@ -47,5 +49,23 @@
     <% if Gem.loaded_specs.key?('biovision-vote') %>
       <%= render(partial: 'votes/vote_block', locals: { votable: comment }) %>
     <% end %>
+  <% end %>
+
+  <% children = comment_tree.select { |_, item| item[:parent_id] == comment.id } %>
+  <% if children.any? %>
+    <div class="children">
+      <% children.each do |_, item| %>
+        <%=
+          render(
+              partial: 'comments/comment',
+              locals: {
+                  comment: item[:comment],
+                  show_container: show_container,
+                  comment_tree: comment_tree
+              }
+          )
+        %>
+      <% end %>
+    </div>
   <% end %>
 </div>
