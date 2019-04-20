@@ -75,6 +75,7 @@ ru:
       subject: "Новый комментарий к вашей записи"
     comment:
       deleted: "Комментарий удалён"
+      cancel_reply: "Отменить"
     form:
       guidelines:
         author_name: "Максимум 100 символов, обязательное поле."

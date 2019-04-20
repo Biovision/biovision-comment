@@ -1,5 +1,11 @@
 <% element_id = "comment-#{comment.id}" %>
-<div id="<%= element_id %>" itemscope itemtype="http://schema.org/Comment" class="comment-item">
+<div
+  id="<%= element_id %>"
+  itemscope
+  itemtype="http://schema.org/Comment"
+  class="comment-item"
+  data-id="<%= comment.id %>"
+>
   <% if comment.deleted? || comment.user&.deleted? %>
     <div class="deleted"><%= t('.deleted') %></div>
   <% else %>
@@ -28,6 +34,15 @@
     <div class="body" itemprop="about">
       <%= simple_format(comment.body) %>
     </div>
+
+    <% if show_container %>
+      <div class="comment-reply-block">
+        <div class="comment-reply-button"><button></button></div>
+        <div class="container hidden">
+          <button class="cancel" type="button"><%= t('.cancel_reply') %></button>
+        </div>
+      </div>
+    <% end %>
 
     <% if Gem.loaded_specs.key?('biovision-vote') %>
       <%= render(partial: 'votes/vote_block', locals: { votable: comment }) %>

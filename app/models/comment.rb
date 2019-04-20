@@ -34,6 +34,8 @@ class Comment < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :agent, optional: true
   belongs_to :commentable, polymorphic: true, counter_cache: true, touch: false
+  belongs_to :parent, class_name: Comment.to_s, optional: true
+  has_many :child_comments, class_name: Comment.to_s, foreign_key: :parent_id, dependent: :destroy
 
   validates_presence_of :body
   validates_length_of :body, maximum: BODY_LIMIT
@@ -70,7 +72,7 @@ class Comment < ApplicationRecord
   end
 
   def self.creation_parameters
-    entity_parameters + %i[commentable_id commentable_type]
+    entity_parameters + %i[commentable_id commentable_type parent_id]
   end
 
   def self.administrative_parameters

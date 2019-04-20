@@ -1,13 +1,24 @@
-<section class="comments-list">
+<%
+  show_container = commentable.respond_to?(:commentable_by?) && commentable.commentable_by?(current_user)
+%>
+<section class="comments-list" id="comments">
   <% if comments.any? %>
     <h3><%= t(:comments_list) %></h3>
 
     <% comments.recent.each do |comment| %>
-      <%= render comment %>
+      <%=
+        render(
+            partial: 'comments/comment',
+            locals: {
+                comment: comment,
+                show_container: show_container
+            }
+        )
+      %>
     <% end %>
   <% end %>
 
-  <% if commentable.respond_to?(:commentable_by?) && commentable.commentable_by?(current_user) %>
+  <% if show_container %>
     <section class="reply-container">
       <h3><%= t(:add_comment) %></h3>
 

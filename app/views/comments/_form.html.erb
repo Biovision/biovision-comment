@@ -88,6 +88,7 @@
     <% if entity.id.nil? %>
       <%= f.hidden_field :commentable_id %>
       <%= f.hidden_field :commentable_type %>
+      <%= f.hidden_field :parent_id %>
     <% end %>
     <%= f.button t(:submit), type: 'submit', class: 'button-primary' %>
   </div>
