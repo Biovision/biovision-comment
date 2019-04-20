@@ -130,6 +130,10 @@ class Comment < ApplicationRecord
     end
   end
 
+  def profile_name
+    user.nil? ? author_name : user.profile_name
+  end
+
   private
 
   def commentable_is_commentable

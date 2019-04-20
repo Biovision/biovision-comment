@@ -13,6 +13,8 @@ module CommentsHelper
   # @param [String] text
   # @param [Hash] options
   def comment_link(entity, text = entity.commentable_name, options = {})
-    link_to(text, CommentsManager.commentable_path(entity), options)
+    anchor = options.key?(:anchor)
+    options.delete(:anchor)
+    link_to(text, CommentsManager.commentable_path(entity, anchor), options)
   end
 end
