@@ -46,9 +46,11 @@ class Comment < ApplicationRecord
   after_create { commentable.comment_impact(self) if commentable.respond_to?(:comment_impact) }
 
   scope :recent, -> { order 'id desc' }
+  scope :chronological, -> { order 'id asc' }
   scope :visible, -> { where(deleted: false, visible: true, spam: false) }
   scope :list_for_administration, -> { recent }
-  scope :list_for_visitors, -> { visible.order('id asc') }
+  scope :list_for_visitors, -> { visible.chronological }
+  scope :list_for_visitors_recent, -> { visible.recent }
   scope :list_for_owner, ->(v) { owned_by(v).where(deleted: false).recent }
 
   # @param [Integer] page
