@@ -24,6 +24,7 @@ ru:
               not_commentable: "недоступен вам для комментирования"
     attributes:
       comment:
+        approved: "Одобрен"
         author_email: "Email"
         author_name: "Имя"
         body: "Текст"
@@ -82,3 +83,10 @@ ru:
         author_email: "Не показывается публично. Максимум 100 символов, обязательное поле."
         body: "Максимум 5000 символов."
       disclaimer: "Отправляя комментарий, вы принимаете пользовательское соглашение и даёте своё согласие на обработку ваших персональных данных."
+  biovision:
+    components:
+      comments:
+        name: "Комментарии"
+      settings:
+        premoderation: "Премодерация"
+        auto_approve_threshold: "Порог автоматического одобрения"

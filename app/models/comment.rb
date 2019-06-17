@@ -4,6 +4,7 @@
 #
 # Attributes:
 #   agent_id [Agent], optional
+#   approved [Boolean]
 #   author_email [String], optional
 #   author_name [String], optional
 #   body [Text]
@@ -27,7 +28,7 @@ class Comment < ApplicationRecord
   include VotableItem if Gem.loaded_specs.key?('biovision-vote')
 
   AUTHOR_LIMIT = 100
-  BODY_LIMIT = 65_535
+  BODY_LIMIT = 1_048_576
 
   toggleable :visible
 
@@ -47,7 +48,7 @@ class Comment < ApplicationRecord
 
   scope :recent, -> { order 'id desc' }
   scope :chronological, -> { order 'id asc' }
-  scope :visible, -> { where(deleted: false, visible: true, spam: false) }
+  scope :visible, -> { where(deleted: false, visible: true, spam: false) } #, approved: true) }
   scope :list_for_administration, -> { recent }
   scope :list_for_visitors, -> { visible.chronological }
   scope :list_for_visitors_recent, -> { visible.recent }

@@ -2,6 +2,6 @@
 
 module Biovision
   module Comment
-    VERSION = '0.4.190425.0'
+    VERSION = '0.4.190617.0'
   end
 end
