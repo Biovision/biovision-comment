@@ -1,25 +1,37 @@
 "use strict";
 
+/**
+ * Biovision Comments component
+ *
+ * @type {Object}
+ */
 const Comments = {
     initialized: false,
-    autoInit: true,
-    components: {},
-    init: function () {
-        for (let component in this.components) {
-            if (this.components.hasOwnProperty(component)) {
-                if (this.components[component].hasOwnProperty("init")) {
-                    this.components[component].init();
-                }
-            }
-        }
-
-        this.initialized = true;
-    }
+    autoInitComponents: true,
+    components: {}
 };
 
+/**
+ * Move new comment form to different parent comment
+ *
+ * Handles click on "Reply" button and moves form under parent comment.
+ * Click on "Cancel" button moves form back to top-level reply.
+ *
+ * @type {Object}
+ */
 Comments.components.replyFormMover = {
     initialized: false,
+    /**
+     * Container for list of comments
+     *
+     * @type {HTMLElement}
+     */
     listContainer: undefined,
+    /**
+     * Container for reply form
+     *
+     * @type {HTMLElement}
+     */
     mainContainer: undefined,
     form: undefined,
     /**
@@ -30,6 +42,9 @@ Comments.components.replyFormMover = {
     cancelButtons: [],
     replySelector: ".comment-reply-button button",
     cancelSelector: ".container button.cancel",
+    /**
+     * Initialize
+     */
     init: function () {
         this.listContainer = document.getElementById("comments");
         this.form = document.getElementById("comment-form");
@@ -44,6 +59,7 @@ Comments.components.replyFormMover = {
         }
     },
     /**
+     * Apply handler for pressing "Reply" button
      *
      * @param {HTMLElement} button
      * @type {Function}
@@ -55,6 +71,7 @@ Comments.components.replyFormMover = {
         button.addEventListener("click", component.move);
     },
     /**
+     * Apply handler for pressing "Cancel" button
      *
      * @param {HTMLElement} button
      * @type {Function}
@@ -66,6 +83,7 @@ Comments.components.replyFormMover = {
         button.addEventListener("click", component.cancel);
     },
     /**
+     * Move reply form to parent comment
      *
      * @param {Event} event
      * @type {Function}
@@ -82,6 +100,7 @@ Comments.components.replyFormMover = {
         }
     },
     /**
+     * Handler for pressing "Cancel" button
      *
      * @param {Event} event
      * @type {Function}

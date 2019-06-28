@@ -11,27 +11,6 @@
 %>
   <%= render partial: 'shared/list_of_errors', locals: { entity: entity } %>
   <div class="fields">
-    <div class="required">
-      <%= f.label :body %>
-      <%=
-        f.text_area(
-            :body,
-            id: "#{model_name}_body",
-            required: true,
-            cols: 60,
-            rows: 5,
-            maxlength: Comment::BODY_LIMIT,
-            class: 'auto-expand',
-            data: {
-                min_rows: 5,
-                max_rows: 30,
-                check: :body
-            }
-        )
-      %>
-      <div class="check-result-error hidden" data-field="body"></div>
-      <div class="guideline"><%= t('.guidelines.body') %></div>
-    </div>
     <% if entity.id.nil? && entity.user.nil? %>
       <div class="required">
         <%= f.label :author_name %>
@@ -78,6 +57,28 @@
         <%= t('.disclaimer') %>
       </div>
     <% end %>
+
+    <div class="required">
+      <%= f.label :body %>
+      <%=
+        f.text_area(
+            :body,
+            id: "#{model_name}_body",
+            required: true,
+            cols: 60,
+            rows: 5,
+            maxlength: Comment::BODY_LIMIT,
+            class: 'auto-expand',
+            data: {
+                min_rows: 5,
+                max_rows: 30,
+                check: :body
+            }
+        )
+      %>
+      <div class="check-result-error hidden" data-field="body"></div>
+      <div class="guideline"><%= t('.guidelines.body') %></div>
+    </div>
   </div>
 
   <%= render 'shared/forms/state_container' %>
@@ -90,6 +91,6 @@
       <%= f.hidden_field :commentable_type %>
       <%= f.hidden_field :parent_id %>
     <% end %>
-    <%= f.button t(:submit), type: 'submit', class: 'button-primary' %>
+    <%= f.button t(:submit), type: 'submit', class: 'button-primary button-action' %>
   </div>
 <% end %>

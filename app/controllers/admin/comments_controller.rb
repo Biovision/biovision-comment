@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Administrative handling comments
 class Admin::CommentsController < AdminController
   include ToggleableEntity
   include LockableEntity
@@ -13,6 +16,13 @@ class Admin::CommentsController < AdminController
   def show
   end
 
+  # put /admin/comments/:id/approve
+  def approve
+    @entity.update(approved: true)
+
+    head :no_content
+  end
+
   protected
 
   def restrict_access
@@ -21,8 +31,6 @@ class Admin::CommentsController < AdminController
 
   def set_entity
     @entity = Comment.find_by(id: params[:id])
-    if @entity.nil?
-      handle_http_404('Cannot find comment')
-    end
+    handle_http_404('Cannot find comment') if @entity.nil?
   end
 end

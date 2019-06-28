@@ -1,39 +1,17 @@
-<%
-  show_container = commentable.respond_to?(:commentable_by?) && commentable.commentable_by?(current_user)
-%>
-<section class="comments-list" id="comments">
-  <% if comments.any? %>
-    <h3><%= t(:comments_list) %></h3>
-
-    <% comment_tree = Comment.tree(comments.recent) %>
-    <% comment_tree.select {|_, item| item[:parent_id].nil? }.each do |_, item| %>
+<% if collection.any? %>
+  <div>
+    <% comment_tree = Comment.tree(collection) %>
+    <% comment_tree.select { |_, item| item[:parent_id].nil? }.each do |_, item| %>
       <%=
         render(
             partial: 'comments/comment',
             locals: {
                 comment: item[:comment],
-                show_container: show_container,
+                show_container: show_reply_container,
                 comment_tree: comment_tree
             }
         )
       %>
     <% end %>
-  <% end %>
-
-  <% if show_container %>
-    <section class="reply-container">
-      <h3><%= t(:add_comment) %></h3>
-
-      <div class="container">
-        <%=
-          render(
-              partial: 'comments/form',
-              locals: {
-                  entity: Comment.new(commentable: commentable, user: current_user)
-              }
-          )
-        %>
-      </div>
-    </section>
-  <% end %>
-</section>
+  </div>
+<% end %>

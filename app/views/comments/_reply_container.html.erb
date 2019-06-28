@@ -1,0 +1,15 @@
+<section class="reply-container">
+  <h3><%= t(:add_comment) %></h3>
+
+  <div class="container">
+    <%=
+      render(
+          partial: 'comments/form',
+          locals: {
+              entity: Comment.new(commentable: entity, user: current_user),
+              handler: handler
+          }
+      )
+    %>
+  </div>
+</section>

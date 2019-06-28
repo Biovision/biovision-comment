@@ -1,15 +1,28 @@
+$border-secondary: .1rem solid #aaa !default;
+$text-color-secondary: #777 !default;
 $row-background-even: #f0f0f0 !default;
 $row-background-odd: #fafafa !default;
 
+.comments {
+  h3::first-letter {
+    text-transform: uppercase;
+  }
+}
+
 .comments-list {
+  border-bottom: $border-secondary;
   margin: var(--spacer-s, 1.6rem) 0;
-  padding: 0 var(--spacer-xs, .8rem);
+  padding: 0 0 var(--spacer-s, 1.6rem);
 }
 
 .comment-item {
   position: relative;
   background-color: $row-background-odd;
   padding: var(--spacer-xxs, .4rem);
+
+  &:first-of-type {
+    margin-top: var(--spacer-s, 1.6rem);
+  }
 
   &:nth-of-type(even) {
     background-color: $row-background-even;
@@ -45,22 +58,67 @@ $row-background-odd: #fafafa !default;
     }
   }
 
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .avatar {
+    height: 4.8rem;
+    margin: 0 var(--spacer-xs, .8rem) 0 0;
+    width: 4.8rem;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+
+    time {
+      color: $text-color-secondary;
+      font-size: var(--font-size-decreased, 1.4rem);
+      margin-top: auto;
+    }
+  }
+
+  .comment-wrapper {
+    display: flex;
+  }
+
+  .vote-block {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    justify-content: center;
+    width: 3.2rem;
+
+    .result {
+      color: $text-color-secondary;
+      font-size: var(--font-size-decreased, 1.4rem);
+      margin: var(--spacer-xxs, .4rem) 0;
+    }
+  }
+
+  .vote {
+    height: 1.6rem;
+    width: .8rem;
+  }
+
   .body {
     background: #ffffff;
+    flex: 1;
     margin: var(--spacer-xs, .8rem);
     padding: var(--spacer-xs, .8rem);
     position: relative;
   }
 
-  .author {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 var(--spacer-xs, .8rem);
+  p {
+    &:first-of-type {
+      margin-top: 0;
+    }
 
-    time {
-      font-size: var(--font-size-decreased, 1.4rem);
-      font-style: italic;
+    &:last-of-type {
+      margin-bottom: 0;
     }
   }
 
@@ -87,6 +145,32 @@ $row-background-odd: #fafafa !default;
         &:after {
           content: ']';
         }
+      }
+    }
+  }
+}
+
+.comment-form {
+  .fields {
+    padding: var(--spacer-s, 1.6rem) 0;
+
+    label {
+      display: block;
+    }
+
+    textarea {
+      margin: 0;
+      padding: var(--spacer-xs, .8rem);
+      width: 100%;
+    }
+  }
+
+  .required {
+    label {
+      &::before {
+        color: rgb(255, 63, 0);
+        content: '*';
+        margin: 0 var(--spacer-xxs, .4rem) 0 0;
       }
     }
   }

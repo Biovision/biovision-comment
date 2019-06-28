@@ -18,7 +18,7 @@
     <% end %>
 
     <div class="meta">
-      <div class="avatar">
+      <div class="avatar covered">
         <%= user_image_preview(comment.user) %>
       </div>
       <div class="info">
@@ -31,23 +31,27 @@
       </div>
     </div>
 
-    <div class="body" itemprop="about">
-      <%= simple_format(comment.body) %>
+    <div class="comment-wrapper">
+      <% if Gem.loaded_specs.key?('biovision-vote') %>
+        <%= render(partial: 'votes/vote_block', locals: { votable: comment }) %>
+      <% end %>
+
+      <div class="body" itemprop="about">
+        <%= simple_format(comment.body) %>
+      </div>
     </div>
 
     <% if show_container %>
       <div class="comment-reply-block">
         <div class="comment-reply-button">
-          <button></button>
+          <button class="button-nav"><%= t('.reply') %></button>
         </div>
         <div class="container hidden">
-          <button class="cancel" type="button"><%= t('.cancel_reply') %></button>
+          <button class="cancel" type="button" class="button-nav">
+            <%= t('.cancel_reply') %>
+          </button>
         </div>
       </div>
-    <% end %>
-
-    <% if Gem.loaded_specs.key?('biovision-vote') %>
-      <%= render(partial: 'votes/vote_block', locals: { votable: comment }) %>
     <% end %>
   <% end %>
 

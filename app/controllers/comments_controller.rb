@@ -2,6 +2,7 @@
 
 # Comments
 class CommentsController < ApplicationController
+  before_action :set_handler
   before_action :restrict_access, except: %i[check create]
   before_action :set_entity, only: %i[edit update destroy]
 
@@ -55,8 +56,8 @@ class CommentsController < ApplicationController
   end
 
   def create_comment
-    @entity = Comment.new(creation_parameters)
-    if @entity.save
+    @entity = @handler.create_comment(creation_parameters)
+    if @entity.valid?
       notify_participants
       next_page = param_from_request(:return_url)
       form_processed_ok(next_page.match?(%r{\A/[^/]}) ? next_page : root_path)
@@ -68,6 +69,11 @@ class CommentsController < ApplicationController
   def set_entity
     @entity = Comment.find_by(id: params[:id])
     handle_http_404('Cannot find comment') if @entity.nil?
+  end
+
+  def set_handler
+    slug = Biovision::Components::CommentsComponent::SLUG
+    @handler = Biovision::Components::BaseComponent.handler(slug)
   end
 
   def entity_parameters

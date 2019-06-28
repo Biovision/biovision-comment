@@ -1,0 +1,34 @@
+<%
+  handler = CommentHandler.new(current_user)
+  collection = handler.list(entity)
+  show_reply_container = handler.allow_reply?(entity)
+%>
+
+<section class="comments" id="comments">
+  <div class="comments-list">
+    <h3><%= t(:comment_count, count: entity.comments_count) %></h3>
+
+    <%=
+      render(
+          partial: 'comments/list',
+          locals: {
+              collection: collection.load,
+              handler: handler,
+              show_reply_container: show_reply_container
+          }
+      )
+    %>
+  </div>
+
+  <% if show_reply_container %>
+    <%=
+      render(
+          partial: 'comments/reply_container',
+          locals: {
+              entity: entity,
+              handler: handler
+          }
+      )
+    %>
+  <% end %>
+</section>
