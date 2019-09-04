@@ -1,5 +1,6 @@
 <% content_for :meta_title, t('.title', id: @entity.id) %>
 <% content_for :breadcrumbs do %>
+  <%= admin_biovision_component_link(component_handler.component) %>
   <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
   <span>
     <%= @entity.id %> (<%= @entity.commentable.model_name.human %>

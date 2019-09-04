@@ -1,8 +1,9 @@
 <% content_for :meta_title, t('.title') %>
 <% content_for :breadcrumbs do %>
-    <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
-    <%= admin_comment_link(@entity) %>
-    <span><%= t('.nav_text') %></span>
+  <%= admin_biovision_component_link(component_handler.component) %>
+  <%= link_to(t('admin.comments.nav_item.text'), admin_comments_path) %>
+  <%= admin_comment_link(@entity) %>
+  <span><%= t('.nav_text') %></span>
 <% end %>
 
 <article>

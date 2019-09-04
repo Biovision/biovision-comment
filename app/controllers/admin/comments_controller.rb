@@ -5,7 +5,7 @@ class Admin::CommentsController < AdminController
   include ToggleableEntity
   include LockableEntity
 
-  before_action :set_entity, except: [:index]
+  before_action :set_entity, except: :index
 
   # get /admin/comments
   def index
@@ -25,8 +25,13 @@ class Admin::CommentsController < AdminController
 
   protected
 
+  def component_slug
+    Biovision::Components::CommentsComponent::SLUG
+  end
+
   def restrict_access
-    require_privilege :moderator
+    error = 'Managing comments is not allowed'
+    handle_http_401(error) unless component_handler.allow?('moderator')
   end
 
   def set_entity

@@ -88,6 +88,8 @@ ru:
     components:
       comments:
         name: "Комментарии"
-      settings:
-        premoderation: "Премодерация"
-        auto_approve_threshold: "Порог автоматического одобрения"
+        privileges:
+          moderator: "Модератор"
+        settings:
+          premoderation: "Премодерация"
+          auto_approve_threshold: "Порог автоматического одобрения"

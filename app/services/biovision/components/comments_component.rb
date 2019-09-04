@@ -6,12 +6,12 @@ module Biovision
     class CommentsComponent < BaseComponent
       SLUG = 'comments'
 
-      def use_parameters?
-        false
+      def self.privilege_names
+        %w[moderator]
       end
 
-      def allow?(options = {})
-        UserPrivilege.user_has_privilege?(user, :moderator)
+      def use_parameters?
+        false
       end
 
       # @param [Hash] parameters

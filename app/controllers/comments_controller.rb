@@ -47,8 +47,13 @@ class CommentsController < ApplicationController
 
   private
 
+  def component_slug
+    Biovision::Components::CommentsComponent::SLUG
+  end
+
   def restrict_access
-    require_privilege :moderator
+    error = 'Managing comments is not allowed'
+    handle_http_401(error) unless component_handler.allow?('moderator')
   end
 
   def emulate_creation
@@ -56,7 +61,7 @@ class CommentsController < ApplicationController
   end
 
   def create_comment
-    @entity = @handler.create_comment(creation_parameters)
+    @entity = component_handler.create_comment(creation_parameters)
     if @entity.valid?
       notify_participants
       next_page = param_from_request(:return_url)
@@ -69,11 +74,6 @@ class CommentsController < ApplicationController
   def set_entity
     @entity = Comment.find_by(id: params[:id])
     handle_http_404('Cannot find comment') if @entity.nil?
-  end
-
-  def set_handler
-    slug = Biovision::Components::CommentsComponent::SLUG
-    @handler = Biovision::Components::BaseComponent.handler(slug)
   end
 
   def entity_parameters
