@@ -10,7 +10,7 @@
     <div class="deleted"><%= t('.deleted') %></div>
   <% else %>
     <meta itemprop="url" content="<%= url_for(anchor: element_id) %>"/>
-    <% if current_user_has_privilege?(:moderator) %>
+    <% if handler.allow?('moderator') %>
       <ul class="actions">
         <li><%= edit_icon(edit_comment_path(id: comment.id)) %></li>
         <li class="danger"><%= destroy_icon(comment) %></li>
@@ -65,7 +65,8 @@
               locals: {
                   comment: item[:comment],
                   show_container: show_container,
-                  comment_tree: comment_tree
+                  comment_tree: comment_tree,
+                  handler: handler
               }
           )
         %>

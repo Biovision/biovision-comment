@@ -8,7 +8,7 @@ class CommentHandler
   def initialize(user = nil)
     slug = Biovision::Components::CommentsComponent::SLUG
     @user = user
-    @handler = Biovision::Components::BaseComponent.handler(slug)
+    @handler = Biovision::Components::BaseComponent.handler(slug, user)
   end
 
   # Get list of comments for entity
@@ -18,7 +18,7 @@ class CommentHandler
   #
   # @param [ApplicationRecord] entity
   def list(entity)
-    if @handler.class.allow?(@user)
+    if @handler.allow?
       entity.comments.list_for_administration
     else
       entity.comments.list_for_visitors
@@ -32,14 +32,19 @@ class CommentHandler
   # comments must be more than threshold; anonymous comments are always
   # non-approved.
   def approve?
-    return true unless @component.settings['premoderate']
+    return true unless @handler.settings['premoderate']
     return false if @user.nil?
-    return true if @component.class.allow?(@user)
+    return true if @handler.allow?
 
-    gate = @component.settings['auto_approve_threshold'].to_i
+    gate = @handler.settings['auto_approve_threshold'].to_i
     positive = Comment.where(user: @user, approved: true).count
     negative = Comment.where(user: @user, approved: false).count
     positive - negative >= gate
+  end
+
+  # @param [String] privilege_name
+  def allow?(*privilege_name)
+    @handler.allow?(*privilege_name)
   end
 
   # @param [ApplicationRecord] entity

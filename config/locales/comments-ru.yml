@@ -38,7 +38,7 @@ ru:
   admin:
     comments:
       nav_item:
-        text: "Комментарии"
+        text: "Список комментариев"
         description: "Модерация комментариев"
       index:
         title: "Комментарии, страница %{page}"

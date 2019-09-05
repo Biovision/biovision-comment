@@ -2,7 +2,6 @@
 
 # Comments
 class CommentsController < ApplicationController
-  before_action :set_handler
   before_action :restrict_access, except: %i[check create]
   before_action :set_entity, only: %i[edit update destroy]
 
@@ -43,6 +42,11 @@ class CommentsController < ApplicationController
       flash[:notice] = t('comments.destroy.success')
     end
     redirect_to(@entity.commentable || admin_comments_path)
+  end
+
+  # get /comments/:id
+  def show
+    redirect_to(admin_comment_path(id: params[:id]))
   end
 
   private
