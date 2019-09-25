@@ -47,6 +47,9 @@ ru:
         title: "Комментарий №%{id}"
       comment:
         deleted: "Комментарий удалён"
+      entity:
+        in_list:
+          approve: "Одобрить"
     index:
       dashboard:
         biovision_comment:
@@ -60,6 +63,7 @@ ru:
   comments:
     create:
       success: "Комментарий добавлен"
+      premoderation: "Ваш комментарий добавлен в очередь модерации"
     update:
       success: "Комментарий изменён"
     destroy:

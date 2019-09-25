@@ -21,6 +21,13 @@
     <%= simple_format(entity.body) %>
   </div>
 
+  <% unless entity.approved? %>
+    <div>
+      <button class="js-approve-comment" data-url="<%= approve_admin_comment_path(id: entity.id) %>"><%= t('.approve') %></button>
+      <button class="js-delete-comment" data-url="<%= admin_comment_path(id: entity.id) %>"><%= t(:delete) %></button>
+    </div>
+  <% end %>
+
   <ul class="actions">
     <li><%= edit_icon(edit_comment_path(id: entity.id)) %></li>
     <% unless entity.deleted? %>

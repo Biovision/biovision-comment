@@ -52,4 +52,13 @@
       </div>
     </dd>
   </dl>
+
+  <%= render partial: 'shared/track', locals: { item: @entity } %>
+
+  <% unless @entity.approved? %>
+    <div>
+      <button class="js-approve-comment" data-url="<%= approve_admin_comment_path(id: @entity.id) %>"><%= t('admin.comments.entity.in_list.approve') %></button>
+      <button class="js-delete-comment" data-url="<%= admin_comment_path(id: @entity.id) %>"><%= t(:delete) %></button>
+    </div>
+  <% end %>
 </article>

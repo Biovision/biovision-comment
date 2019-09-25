@@ -115,4 +115,60 @@ Comments.components.replyFormMover = {
     }
 };
 
+Comments.components.commentApproval = {
+    initialized: false,
+    selector: ".js-approve-comment",
+    buttons: [],
+    init: function () {
+        document.querySelectorAll(this.selector).forEach(this.apply);
+        this.initialized = true;
+    },
+    apply: function (button) {
+        const component = Comments.components.commentApproval;
+        component.buttons.push(button);
+        button.addEventListener("click", component.click);
+    },
+    click: function (event) {
+        const button = event.target;
+        const url = button.getAttribute("data-url");
+        const request = Biovision.jsonAjaxRequest("put", url, function () {
+            const container = button.closest("div");
+            container.remove();
+        }, function () {
+            button.disabled = false;
+        });
+
+        button.disabled = true;
+        request.send();
+    }
+};
+
+Comments.components.commentDelete = {
+    initialized: false,
+    selector: ".js-delete-comment",
+    buttons: [],
+    init: function () {
+        document.querySelectorAll(this.selector).forEach(this.apply);
+        this.initialized = true;
+    },
+    apply: function (button) {
+        const component = Comments.components.commentDelete;
+        component.buttons.push(button);
+        button.addEventListener("click", component.click);
+    },
+    click: function (event) {
+        const button = event.target;
+        const url = button.getAttribute("data-url");
+        const request = Biovision.jsonAjaxRequest("delete", url, function () {
+            const container = button.closest("div");
+            container.remove();
+        }, function () {
+            button.disabled = false;
+        });
+
+        button.disabled = true;
+        request.send();
+    }
+};
+
 Biovision.components.comments = Comments;

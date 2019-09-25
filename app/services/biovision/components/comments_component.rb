@@ -17,6 +17,7 @@ module Biovision
       # @param [Hash] parameters
       def create_comment(parameters)
         @comment = ::Comment.new(parameters)
+        @comment.approved = approval_flag if settings['premoderation']
         @comment.save
         @comment
       end
@@ -33,6 +34,20 @@ module Biovision
         numbers.each { |f| result[f] = data[f].to_i }
 
         result
+      end
+
+      def approval_flag
+        threshold = settings['auto_approve_threshold']
+        if @comment.user.nil?
+          criteria = {
+            user_id: nil,
+            ip: @comment.ip,
+            agent_id: @comment.agent_id
+          }
+          ::Comment.approved.where(criteria).count >= threshold
+        else
+          ::Comment.approved.owned_by(@comment.user).count >= threshold
+        end
       end
     end
   end

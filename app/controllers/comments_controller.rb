@@ -90,6 +90,7 @@ class CommentsController < ApplicationController
   end
 
   def notify_participants
+    flash[:notice] = t('comments.create.premoderation') unless @entity.approved?
     # to be implemented...
   end
 end

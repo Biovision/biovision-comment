@@ -9,11 +9,12 @@ Rails.application.routes.draw do
     end
 
     namespace :admin do
-      resources :comments, only: %i[index show] do
+      resources :comments, only: %i[index show destroy] do
         member do
           post 'toggle', defaults: { format: :json }
           put 'lock', defaults: { format: :json }
           delete 'lock', action: :unlock, defaults: { format: :json }
+          put 'approve'
         end
       end
     end

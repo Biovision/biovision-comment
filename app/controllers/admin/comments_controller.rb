@@ -23,6 +23,12 @@ class Admin::CommentsController < AdminController
     head :no_content
   end
 
+  def destroy
+    @entity.destroy
+
+    head :no_content
+  end
+
   protected
 
   def component_slug

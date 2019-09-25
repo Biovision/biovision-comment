@@ -48,7 +48,8 @@ class Comment < ApplicationRecord
 
   scope :recent, -> { order 'id desc' }
   scope :chronological, -> { order 'id asc' }
-  scope :visible, -> { where(deleted: false, visible: true, spam: false) } #, approved: true) }
+  scope :approved, -> { where(approved: true) }
+  scope :visible, -> { approved.where(deleted: false, visible: true, spam: false) }
   scope :list_for_administration, -> { recent }
   scope :list_for_visitors, -> { visible.chronological }
   scope :list_for_visitors_recent, -> { visible.recent }
