@@ -1,7 +1,0 @@
-Здравствуйте, <%= @comment.commentable.user.name_for_letter %>.
-
-На вашу запись «<%= @comment.commentable.title %>»
-<%= url_for @comment.commentable %>
-
-Сам комментарий (<%= @comment.user.nil? ? 'анонимный' : @comment.user.profile_name %>):
-<%= @comment.body %>

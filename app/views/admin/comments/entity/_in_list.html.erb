@@ -12,13 +12,13 @@
 
   <div class="info">
     <%= entity.commentable_name %>
-    (<%= entity.commentable_title %>)<br/>
+    (<cite><%= entity.commentable_title %></cite>)<br/>
     <%= admin_user_link(entity.user) %>,
     <%= time_tag entity.created_at %>
   </div>
 
   <div class="secondary info">
-    <%= simple_format(entity.body) %>
+    <p><%= entity.preview %></p>
   </div>
 
   <% unless entity.approved? %>
@@ -31,7 +31,7 @@
   <ul class="actions">
     <li><%= edit_icon(edit_comment_path(id: entity.id)) %></li>
     <% unless entity.deleted? %>
-      <li><%= world_icon(CommentsManager.commentable_path(entity, true)) %></li>
+      <li><%= world_icon(Biovision::Components::CommentsComponent.commentable_path(entity, true)) %></li>
       <li class="danger"><%= destroy_icon(entity) %></li>
     <% end %>
   </ul>

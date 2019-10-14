@@ -15,6 +15,7 @@ module CommentsHelper
   def comment_link(entity, text = entity.commentable_name, options = {})
     anchor = options.key?(:anchor)
     options.delete(:anchor)
-    link_to(text, CommentsManager.commentable_path(entity, anchor), options)
+    path = Biovision::Components::CommentsComponent.commentable_path(entity, anchor)
+    link_to(text, path, options)
   end
 end

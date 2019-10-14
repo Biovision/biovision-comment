@@ -110,12 +110,18 @@ class Comment < ApplicationRecord
   end
 
   def notify_entry_owner?
+    return false unless commentable.respond_to?(:user)
+
     entry_owner = commentable.user
-    if entry_owner.is_a?(User) && !owned_by?(entry_owner)
-      entry_owner.can_receive_letters?
-    else
-      false
-    end
+    return false if entry_owner.nil? || owned_by?(entry_owner)
+
+    !entry_owner.nil?
+  end
+
+  def notify_parent_owner?
+    return false if parent.nil?
+
+    !parent.owned_by?(user)
   end
 
   def text_for_link
@@ -127,7 +133,9 @@ class Comment < ApplicationRecord
   end
 
   def commentable_title
-    if commentable.respond_to?(:title)
+    if commentable.respond_to?(:title!)
+      commentable.title!
+    elsif commentable.respond_to?(:title)
       commentable.title
     else
       commentable_name
@@ -136,6 +144,13 @@ class Comment < ApplicationRecord
 
   def profile_name
     user.nil? ? author_name : user.profile_name
+  end
+
+  # @param [Integer] word_count
+  def preview(word_count = 50)
+    words = body.split(/\s+/)
+    ellipsis = words.count > word_count ? '…' : ''
+    words.first(word_count).join(' ') + ellipsis
   end
 
   private

@@ -14,7 +14,7 @@
   <ul class="actions">
     <li><%= back_icon(admin_comments_path) %></li>
     <% unless @entity.deleted? %>
-      <li><%= world_icon(CommentsManager.commentable_path(@entity, true)) %></li>
+      <li><%= world_icon(Biovision::Components::CommentsComponent.commentable_path(@entity, true)) %></li>
     <% end %>
     <% unless @entity.locked? %>
       <li><%= edit_icon edit_comment_path(id: @entity.id) %></li>

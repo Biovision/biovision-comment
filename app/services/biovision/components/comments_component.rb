@@ -10,6 +10,33 @@ module Biovision
         %w[moderator]
       end
 
+      # @param [Comment] comment
+      # @param [TrueClass|FalseClass] anchor
+      def self.commentable_path(comment, anchor = false)
+        method_name = "#{comment.commentable_type}_path".downcase.to_sym
+        if comment.commentable.respond_to?(:url)
+          result = comment.commentable.url
+          anchor ? "#{result}#comment-#{comment.id}" : result
+        else
+          "##{method_name}"
+        end
+      end
+
+      # @param [Comment] comment
+      def self.notify(comment)
+        return if comment.data['notified']
+
+        parent = comment.parent
+        if parent.nil?
+          CommentMailer.entry_reply(comment.id).deliver_later if comment.notify_entry_owner?
+        else
+          CommentMailer.comment_reply(comment.id).deliver_later if comment.notify_parent_owner?
+        end
+
+        comment.data['notified'] = true
+        comment.save
+      end
+
       def use_parameters?
         false
       end
@@ -19,6 +46,8 @@ module Biovision
         @comment = ::Comment.new(parameters)
         @comment.approved = approval_flag if settings['premoderation']
         @comment.save
+        self.class.notify(@comment) if @comment.approved?
+
         @comment
       end
 

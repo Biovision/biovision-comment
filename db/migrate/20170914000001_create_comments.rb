@@ -38,6 +38,7 @@ class CreateComments < ActiveRecord::Migration[5.0]
 
     add_index :comments, :data, using: :gin
     add_index :comments, %i[commentable_id commentable_type]
+    add_index :comments, %i[approved agent_id ip]
     add_foreign_key :comments, :comments, column: :parent_id, on_update: :cascade, on_delete: :cascade
   end
 

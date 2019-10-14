@@ -19,6 +19,7 @@ class Admin::CommentsController < AdminController
   # put /admin/comments/:id/approve
   def approve
     @entity.update(approved: true)
+    component_handler.class.notify(@entity)
 
     head :no_content
   end
