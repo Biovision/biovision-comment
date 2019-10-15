@@ -10,6 +10,6 @@ module CommentableItem
 
   # @param [User] user
   def commentable_by?(user)
-    !user.nil?
+    respond_to?(:visible_to?) ? visible_to?(user) : !user.nil?
   end
 end

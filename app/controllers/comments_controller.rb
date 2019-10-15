@@ -67,7 +67,7 @@ class CommentsController < ApplicationController
   def create_comment
     @entity = component_handler.create_comment(creation_parameters)
     if @entity.valid?
-      notify_participants
+      flash[:notice] = t('comments.create.premoderation') unless @entity.approved?
       next_page = param_from_request(:return_url)
       form_processed_ok(next_page.match?(%r{\A/[^/]}) ? next_page : root_path)
     else
@@ -87,10 +87,5 @@ class CommentsController < ApplicationController
   def creation_parameters
     permitted = Comment.creation_parameters
     params.require(:comment).permit(permitted).merge(owner_for_entity(true))
-  end
-
-  def notify_participants
-    flash[:notice] = t('comments.create.premoderation') unless @entity.approved?
-    # to be implemented...
   end
 end

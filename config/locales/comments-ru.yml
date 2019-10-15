@@ -100,5 +100,7 @@ ru:
         privileges:
           moderator: "Модератор"
         settings:
-          premoderation: "Премодерация"
           auto_approve_threshold: "Порог автоматического одобрения"
+          premoderation: "Премодерация"
+          spam_link_threshold: "Порог количества ссылок для пометки как спам"
+          trap_spam: "Отлавливать спам"

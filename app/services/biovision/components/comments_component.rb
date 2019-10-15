@@ -5,6 +5,7 @@ module Biovision
     # Handler for Biovision Comments
     class CommentsComponent < BaseComponent
       SLUG = 'comments'
+      SPAM_PATTERN = %r{https?://[a-z0-9]+}i.freeze
 
       def self.privilege_names
         %w[moderator]
@@ -26,11 +27,12 @@ module Biovision
       def self.notify(comment)
         return if comment.data['notified']
 
-        parent = comment.parent
-        if parent.nil?
-          CommentMailer.entry_reply(comment.id).deliver_later if comment.notify_entry_owner?
-        else
-          CommentMailer.comment_reply(comment.id).deliver_later if comment.notify_parent_owner?
+        if comment.parent.nil?
+          if comment.notify_entry_owner?
+            CommentMailer.entry_reply(comment.id).deliver_later
+          end
+        elsif comment.notify_parent_owner?
+          CommentMailer.comment_reply(comment.id).deliver_later
         end
 
         comment.data['notified'] = true
@@ -45,6 +47,7 @@ module Biovision
       def create_comment(parameters)
         @comment = ::Comment.new(parameters)
         @comment.approved = approval_flag if settings['premoderation']
+        trap_spam if settings['trap_spam']
         @comment.save
         self.class.notify(@comment) if @comment.approved?
 
@@ -57,9 +60,9 @@ module Biovision
       # @return [Hash]
       def normalize_settings(data)
         result = {}
-        flags  = %w[premoderation]
+        flags = %w[premoderation trap_spam]
         flags.each { |f| result[f] = data[f].to_i == 1 }
-        numbers = %w[auto_approve_threshold]
+        numbers = %w[auto_approve_threshold spam_link_threshold]
         numbers.each { |f| result[f] = data[f].to_i }
 
         result
@@ -69,14 +72,19 @@ module Biovision
         threshold = settings['auto_approve_threshold']
         if @comment.user.nil?
           criteria = {
-            user_id: nil,
-            ip: @comment.ip,
-            agent_id: @comment.agent_id
+            agent_id: @comment.agent_id, ip: @comment.ip, user_id: nil
           }
           ::Comment.approved.where(criteria).count >= threshold
         else
           ::Comment.approved.owned_by(@comment.user).count >= threshold
         end
+      end
+
+      def trap_spam
+        threshold = settings['spam_link_threshold'].to_i
+        return unless @comment.body.scan(SPAM_PATTERN).length > threshold
+
+        @comment.approved = false
       end
     end
   end
