@@ -40,6 +40,12 @@ class CreateComments < ActiveRecord::Migration[5.0]
     add_index :comments, %i[commentable_id commentable_type]
     add_index :comments, %i[approved agent_id ip]
     add_foreign_key :comments, :comments, column: :parent_id, on_update: :cascade, on_delete: :cascade
+
+    execute %(
+      create index if not exists
+        comments_search_idx on comments
+        using gin(to_tsvector('russian', body));
+    )
   end
 
   def create_component_record

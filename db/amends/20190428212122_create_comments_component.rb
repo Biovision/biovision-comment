@@ -9,8 +9,10 @@ class CreateCommentsComponent < ActiveRecord::Migration[5.2]
     BiovisionComponent.create!(
       slug: slug,
       settings: {
+        auto_approve_threshold: 3,
         premoderation: false,
-        auto_approve_threshold: 3
+        spam_link_threshold: 0,
+        trap_spam: true
       }
     )
   end

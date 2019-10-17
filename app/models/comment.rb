@@ -50,6 +50,7 @@ class Comment < ApplicationRecord
   scope :chronological, -> { order 'id asc' }
   scope :approved, -> { where(approved: true) }
   scope :visible, -> { approved.where(deleted: false, visible: true, spam: false) }
+  scope :search, ->(q) { where("to_tsvector('russian', body) @@ phraseto_tsquery('russian', ?)", q.to_s) unless q.blank? }
   scope :list_for_administration, -> { recent }
   scope :list_for_visitors, -> { visible.chronological }
   scope :list_for_visitors_recent, -> { visible.recent }
