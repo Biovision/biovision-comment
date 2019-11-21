@@ -46,6 +46,7 @@ module Biovision
       # @param [Hash] parameters
       def create_comment(parameters)
         @comment = ::Comment.new(parameters)
+        limit_comment_body
         @comment.approved = approval_flag if settings['premoderation']
         trap_spam if settings['trap_spam']
         @comment.save
@@ -62,7 +63,7 @@ module Biovision
         result = {}
         flags = %w[premoderation trap_spam]
         flags.each { |f| result[f] = data[f].to_i == 1 }
-        numbers = %w[auto_approve_threshold spam_link_threshold]
+        numbers = %w[auto_approve_threshold body_limit spam_link_threshold]
         numbers.each { |f| result[f] = data[f].to_i }
 
         result
@@ -85,6 +86,14 @@ module Biovision
         return unless @comment.body.scan(SPAM_PATTERN).length > threshold
 
         @comment.approved = false
+      end
+
+      def limit_comment_body
+        body_limit = @component.settings['body_limit'].to_i
+        body_limit = 5000 if body_limit < 1
+        body_limit -= 1
+
+        @comment.body = @comment.body.to_s[0..body_limit]
       end
     end
   end

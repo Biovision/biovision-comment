@@ -82,6 +82,7 @@ $row-background-odd: #fafafa !default;
 
   .comment-wrapper {
     display: flex;
+    flex-wrap: wrap;
   }
 
   .vote-block {
@@ -151,6 +152,16 @@ $row-background-odd: #fafafa !default;
 
   .children {
     margin-left: var(--spacer-xs, .8rem);
+  }
+
+  .approval-buttons {
+    padding: var(--spacer-xs);
+    text-align: center;
+    width: 100%;
+
+    button {
+      cursor: pointer;
+    }
   }
 }
 

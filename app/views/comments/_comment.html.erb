@@ -39,6 +39,13 @@
       <div class="body" itemprop="about">
         <%= simple_format(comment.body) %>
       </div>
+
+      <% if handler.allow?('moderator') && !comment.approved? %>
+        <div class="approval-buttons">
+          <button class="js-approve-comment button-primary" data-url="<%= approve_admin_comment_path(id: comment.id) %>" type="button"><%= t('admin.comments.entity.in_list.approve') %></button>
+          <button class="js-delete-comment button-destroy" data-url="<%= admin_comment_path(id: comment.id) %>" type="button"><%= t(:delete) %></button>
+        </div>
+      <% end %>
     </div>
 
     <% if show_container %>

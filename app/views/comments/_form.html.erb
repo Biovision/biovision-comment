@@ -59,6 +59,10 @@
     <% end %>
 
     <div class="required">
+      <%
+        body_limit = BiovisionComponent['comments'].settings['body_limit'].to_i
+        body_limit = 5000 if body_limit < 1
+      %>
       <%= f.label :body %>
       <%=
         f.text_area(
@@ -67,7 +71,7 @@
             required: true,
             cols: 60,
             rows: 5,
-            maxlength: Comment::BODY_LIMIT,
+            maxlength: 5000,
             class: 'auto-expand',
             data: {
                 min_rows: 5,
@@ -77,7 +81,7 @@
         )
       %>
       <div class="check-result-error hidden" data-field="body"></div>
-      <div class="guideline"><%= t('.guidelines.body') %></div>
+      <div class="guideline"><%= t('.guidelines.body', limit: body_limit) %></div>
     </div>
   </div>
 

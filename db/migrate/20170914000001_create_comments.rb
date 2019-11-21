@@ -56,6 +56,7 @@ class CreateComments < ActiveRecord::Migration[5.0]
       slug: slug,
       settings: {
         auto_approve_threshold: 3,
+        body_limit: 5000,
         premoderation: false,
         spam_link_threshold: 0,
         trap_spam: true

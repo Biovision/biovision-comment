@@ -11,6 +11,7 @@
 #   commentable_id [Integer]
 #   commentable_type [String]
 #   created_at [DateTime]
+#   data [JSON]
 #   deleted [Boolean]
 #   downvote_count [Integer]
 #   ip [Inet], optional
