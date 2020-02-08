@@ -51,8 +51,8 @@ class CommentsController < ApplicationController
 
   private
 
-  def component_slug
-    Biovision::Components::CommentsComponent::SLUG
+  def component_class
+    Biovision::Components::CommentsComponent
   end
 
   def restrict_access

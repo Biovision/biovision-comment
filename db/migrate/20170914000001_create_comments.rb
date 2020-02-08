@@ -16,6 +16,7 @@ class CreateComments < ActiveRecord::Migration[5.0]
   def create_comments_table
     create_table :comments, comment: 'Comment for commentable item' do |t|
       t.timestamps
+      t.uuid :uuid
       t.integer :parent_id
       t.references :user, foreign_key: { on_update: :cascade, on_delete: :cascade }
       t.references :agent, foreign_key: { on_update: :cascade, on_delete: :nullify }
@@ -25,9 +26,6 @@ class CreateComments < ActiveRecord::Migration[5.0]
       t.boolean :deleted, default: false, null: false
       t.boolean :spam, default: false, null: false
       t.boolean :approved, default: true, null: false
-      t.integer :upvote_count, default: 0, null: false
-      t.integer :downvote_count, default: 0, null: false
-      t.integer :vote_result, default: 0, null: false
       t.integer :commentable_id, null: false
       t.string :commentable_type, null: false
       t.string :author_name
@@ -36,6 +34,7 @@ class CreateComments < ActiveRecord::Migration[5.0]
       t.jsonb :data, default: {}, null: false
     end
 
+    add_index :comments, :uuid, unique: true
     add_index :comments, :data, using: :gin
     add_index :comments, %i[commentable_id commentable_type]
     add_index :comments, %i[approved agent_id ip]
@@ -49,7 +48,7 @@ class CreateComments < ActiveRecord::Migration[5.0]
   end
 
   def create_component_record
-    slug = Biovision::Components::CommentsComponent::SLUG
+    slug = Biovision::Components::CommentsComponent.slug
     return if BiovisionComponent.exists?(slug: slug)
 
     BiovisionComponent.create!(

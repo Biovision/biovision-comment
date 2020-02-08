@@ -6,9 +6,8 @@ class CommentHandler
 
   # @param [User] user
   def initialize(user = nil)
-    slug = Biovision::Components::CommentsComponent::SLUG
     @user = user
-    @handler = Biovision::Components::BaseComponent.handler(slug, user)
+    @handler = Biovision::Components::CommentsComponent[user]
   end
 
   # Get list of comments for entity
