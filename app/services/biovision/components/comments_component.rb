@@ -55,13 +55,24 @@ module Biovision
         @comment
       end
 
+      def use_captcha?
+        return false unless settings['recaptcha']
+        return false unless Gem.loaded_specs.key?('recaptcha')
+        return true if user.nil?
+
+        gate = settings['auto_approve_threshold'].to_i
+        positive = Comment.where(user: user, approved: true).count
+        negative = Comment.where(user: user, approved: false).count
+        positive - negative < gate
+      end
+
       protected
 
       # @param [Hash] data
       # @return [Hash]
       def normalize_settings(data)
         result = {}
-        flags = %w[premoderation trap_spam]
+        flags = %w[premoderation trap_spam recaptcha]
         flags.each { |f| result[f] = data[f].to_i == 1 }
         numbers = %w[auto_approve_threshold body_limit spam_link_threshold]
         numbers.each { |f| result[f] = data[f].to_i }

@@ -105,3 +105,4 @@ ru:
           premoderation: "Премодерация"
           spam_link_threshold: "Порог количества ссылок для пометки как спам"
           trap_spam: "Отлавливать спам"
+          recaptcha: "Использовать reCaptcha"

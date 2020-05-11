@@ -65,7 +65,7 @@ class CommentsController < ApplicationController
   end
 
   def create_comment
-    @entity = component_handler.create_comment(creation_parameters)
+    verify_captcha_and_create
     if @entity.valid?
       flash[:notice] = t('comments.create.premoderation') unless @entity.approved?
       next_page = param_from_request(:return_url)
@@ -87,5 +87,18 @@ class CommentsController < ApplicationController
   def creation_parameters
     permitted = Comment.creation_parameters
     params.require(:comment).permit(permitted).merge(owner_for_entity(true))
+  end
+
+  protected
+
+  def verify_captcha_and_create
+    if component_handler.use_captcha?
+      @entity = Comment.new
+      verified = verify_recaptcha(model: @entity)
+    else
+      verified = true
+    end
+
+    @entity = component_handler.create_comment(creation_parameters) if verified
   end
 end
