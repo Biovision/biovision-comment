@@ -61,8 +61,8 @@ module Biovision
         return true if user.nil?
 
         gate = settings['auto_approve_threshold'].to_i
-        positive = Comment.where(user: user, approved: true).count
-        negative = Comment.where(user: user, approved: false).count
+        positive = ::Comment.where(user: user, approved: true).count
+        negative = ::Comment.where(user: user, approved: false).count
         positive - negative < gate
       end
 
