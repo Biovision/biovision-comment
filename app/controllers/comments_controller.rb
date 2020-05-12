@@ -67,7 +67,9 @@ class CommentsController < ApplicationController
   def create_comment
     verify_captcha_and_create
     if @entity.valid?
-      flash[:notice] = t('comments.create.premoderation') unless @entity.approved?
+      unless @entity.approved?
+        flash[:notice] = t('comments.create.premoderation')
+      end
       next_page = param_from_request(:return_url)
       form_processed_ok(next_page.match?(%r{\A/[^/]}) ? next_page : root_path)
     else
@@ -92,13 +94,9 @@ class CommentsController < ApplicationController
   protected
 
   def verify_captcha_and_create
-    if component_handler.use_captcha?
-      @entity = Comment.new
-      verified = verify_recaptcha(model: @entity)
-    else
-      verified = true
-    end
+    entity = Comment.new(creation_parameters)
+    verify_recaptcha(model: entity) if component_handler.use_captcha?
 
-    @entity = component_handler.create_comment(creation_parameters) if verified
+    @entity = component_handler.create_comment(entity)
   end
 end

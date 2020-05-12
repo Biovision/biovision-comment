@@ -43,9 +43,9 @@ module Biovision
         false
       end
 
-      # @param [Hash] parameters
-      def create_comment(parameters)
-        @comment = ::Comment.new(parameters)
+      # @param [Hash|Comment] data
+      def create_comment(data)
+        @comment = data.is_a?(::Comment) ? data : ::Comment.new(data)
         limit_comment_body
         @comment.approved = approval_flag if settings['premoderation']
         trap_spam if settings['trap_spam']
