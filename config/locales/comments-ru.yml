@@ -102,7 +102,9 @@ ru:
         settings:
           auto_approve_threshold: "Порог автоматического одобрения"
           body_limit: "Максимальная длина"
+          ignore_spam: "Игнорировать спам"
           premoderation: "Премодерация"
-          spam_link_threshold: "Порог количества ссылок для пометки как спам"
+          spam_link_threshold: "Порог попаданий шаблона для пометки как спам"
+          spam_pattern: "RegEx для ловли спама"
           trap_spam: "Отлавливать спам"
           recaptcha: "Использовать reCaptcha"

@@ -58,7 +58,8 @@ class CreateComments < ActiveRecord::Migration[5.0]
         body_limit: 5000,
         premoderation: false,
         spam_link_threshold: 0,
-        trap_spam: true
+        trap_spam: true,
+        spam_pattern: 'https?://[a-z0-9]+'
       }
     )
   end

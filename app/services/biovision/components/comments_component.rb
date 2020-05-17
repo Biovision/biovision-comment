@@ -5,7 +5,6 @@ module Biovision
     # Handler for Biovision Comments
     class CommentsComponent < BaseComponent
       SLUG = 'comments'
-      SPAM_PATTERN = %r{https?://[a-z0-9]+}i.freeze
 
       def self.privilege_names
         %w[moderator]
@@ -49,7 +48,7 @@ module Biovision
         limit_comment_body
         @comment.approved = approval_flag if settings['premoderation']
         trap_spam if settings['trap_spam']
-        @comment.save
+        @comment.save unless ignore?
         self.class.notify(@comment) if @comment.approved?
 
         @comment
@@ -72,10 +71,12 @@ module Biovision
       # @return [Hash]
       def normalize_settings(data)
         result = {}
-        flags = %w[premoderation trap_spam recaptcha]
+        flags = %w[premoderation trap_spam recaptcha ignore_spam]
         flags.each { |f| result[f] = data[f].to_i == 1 }
         numbers = %w[auto_approve_threshold body_limit spam_link_threshold]
         numbers.each { |f| result[f] = data[f].to_i }
+        strings = %w[spam_pattern]
+        strings.each { |f| result[f] = data[f].to_s }
 
         result
       end
@@ -93,10 +94,23 @@ module Biovision
       end
 
       def trap_spam
-        threshold = settings['spam_link_threshold'].to_i
-        return unless @comment.body.scan(SPAM_PATTERN).length > threshold
+        @comment.approved = !spam?
+      end
 
-        @comment.approved = false
+      def spam?
+        pattern = settings['spam_pattern']
+        return false if pattern.blank?
+
+        threshold = settings['spam_link_threshold'].to_i
+
+        @comment.body.scan(Regexp.new(pattern, 'i')).length > threshold
+      rescue RegexpError => e
+        Rails.logger.warn(e)
+        false
+      end
+
+      def ignore?
+        settings['ignore_spam'] && spam?
       end
 
       def limit_comment_body
